@@ -6,8 +6,16 @@ import Event from "./event.js";
 
 export default class EventDispatcher
 {
-	constructor()
+	constructor(options)
 	{
+		this.domNamespaceSuffix = EventDispatcher.domNamespaceSuffix;
+		
+		if(!options)
+			options = {};
+		
+		if(options.domNamespaceSuffix)
+			this.domNamespaceSuffix = options.domNamespaceSuffix;
+		
 		this._listenersByType = {};
 	}
 	
@@ -96,19 +104,19 @@ export default class EventDispatcher
 	
 	/**
 	 * Fires an event on this object
-	 * @param {string|Payload.Event} event Either the event type as a string, or an instance of Payload.Event
+	 * @param {string|Event} event Either the event type as a string, or an instance of Event
 	 * @return {EventDispatcher} This event dispatcher
 	 */
 	dispatchEvent(event)
 	{
-		if(!(event instanceof Payload.Event))
+		if(!(event instanceof Event))
 		{
 			if(typeof event == "string")
-				event = new Payload.Event(event);
+				event = new Event(event);
 			else
 			{
 				var src = event;
-				event = new Payload.Event();
+				event = new Event();
 				for(var name in src)
 					event[name] = src[name];
 			}
@@ -120,17 +128,17 @@ export default class EventDispatcher
 		for(var obj = this.parent; obj != null; obj = obj.parent)
 			path.unshift(obj);
 		
-		event.phase = Payload.Event.CAPTURING_PHASE;
+		event.phase = Event.CAPTURING_PHASE;
 		for(var i = 0; i < path.length && !event._cancelled; i++)
 			path[i]._triggerListeners(event);
 			
 		if(event._cancelled)
 			return this;
 			
-		event.phase = Payload.Event.AT_TARGET;
+		event.phase = Event.AT_TARGET;
 		this._triggerListeners(event);
 			
-		event.phase = Payload.Event.BUBBLING_PHASE;
+		event.phase = Event.BUBBLING_PHASE;
 		for(i = path.length - 1; i >= 0 && !event._cancelled; i--)
 			path[i]._triggerListeners(event);
 		
@@ -151,7 +159,7 @@ export default class EventDispatcher
 				var value = event[key];
 				
 				if(key == "type")
-					value += ".Payload";
+					value += "." + this.domNamespaceSuffix;
 				
 				customEvent[key] = value;
 			}
@@ -216,3 +224,5 @@ export default class EventDispatcher
 		}
 	}
 }
+
+EventDispatcher.domNamespaceSuffix = "ed";
