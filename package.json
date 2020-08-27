@@ -1,0 +1,24 @@
+{
+  "name": "@perry-rylance/event-dispatcher",
+  "version": "1.0.0",
+  "description": "A lightweight ES6 event dispatcher which supports bubbling, capture phases and bubbling to the DOM tree.",
+  "main": "event-dispatcher.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PerryRylance/EventDispatcher.git"
+  },
+  "keywords": [
+    "ES6",
+    "event-dispatcher"
+  ],
+  "author": "Perry Rylance <contact@perryrylance.com> (https://perryrylance.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PerryRylance/EventDispatcher/issues"
+  },
+  "homepage": "https://github.com/PerryRylance/EventDispatcher#readme"
+}
