@@ -1,10 +1,40 @@
-"use strict";
+/** @module perry-rylance/event */
+
+class Event
+{
+	constructor(options)
+	{
+		if(typeof options == "string")
+			this.type = options;
+		
+		this.bubbles		= true;
+		this.cancelable		= true;
+		this.phase			= Event.PHASE_CAPTURE;
+		this.target			= null;
+		
+		this._cancelled = false;
+		
+		if(typeof options == "object")
+			for(var name in options)
+				this[name] = options[name];
+	}
+	
+	/**
+	 * Prevents any further propagation of the event
+	 */
+	stopPropagation()
+	{
+		this._cancelled = true;
+	}
+}
+
+Event.CAPTURING_PHASE		= 0;
+Event.AT_TARGET				= 1;
+Event.BUBBLING_PHASE		= 2;
 
 /** @module perry-rylance/event-dispatcher */
 
-import Event from "./event.js";
-
-export default class EventDispatcher
+class EventDispatcher
 {
 	constructor(options)
 	{
@@ -191,7 +221,7 @@ export default class EventDispatcher
 	 */
 	trigger()
 	{
-		return this.dispatchEvent(this, arguments);
+		return this.dispatchEvent.apply(this, arguments);
 	}
 	
 	/**
@@ -199,7 +229,7 @@ export default class EventDispatcher
 	 */
 	emit()
 	{
-		return this.dispatchEvent(this, arguments);
+		return this.dispatchEvent.apply(this, arguments);
 	}
 	
 	/**
@@ -226,3 +256,6 @@ export default class EventDispatcher
 }
 
 EventDispatcher.domNamespaceSuffix = "ed";
+
+module.exports = Event;
+module.exports = EventDispatcher;
