@@ -216,14 +216,14 @@ class EventDispatcher
 	 */
 	once(type, listener)
 	{
-		this.on(type, function(event) {
+		let callback = (event) => {
 			
-			if(listener)
-				listener(event);
+			listener(event);
+			this.off(type, callback);
 			
-			this.off(type, listener);
-			
-		});
+		};
+		
+		this.on(type, callback);
 		
 		return this;
 	}
