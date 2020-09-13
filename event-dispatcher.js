@@ -209,6 +209,26 @@ class EventDispatcher
 	}
 	
 	/**
+	 * Adds an event listener on this object, which will only be called once, and then removed
+	 * @param {string} type The event type, or multiple types separated by spaces
+	 * @param {function} callback The callback to call when the event fires
+	 * @return {EventDispatcher} This event dispatcher
+	 */
+	once(type, listener)
+	{
+		this.on(type, function(event) {
+			
+			if(listener)
+				listener(event);
+			
+			this.off(type, listener);
+			
+		});
+		
+		return this;
+	}
+	
+	/**
 	 * @see removeEventListener
 	 */
 	off()
