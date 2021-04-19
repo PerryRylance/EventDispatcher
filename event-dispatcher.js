@@ -291,5 +291,4 @@ class EventDispatcher
 
 EventDispatcher.domNamespaceSuffix = "ed";
 
-module.exports = Event;
-module.exports = EventDispatcher;
+export default EventDispatcher;
